@@ -1,3 +1,5 @@
+import { $ } from '../util/util.js';
+
 export default class View {
   constructor(document) {
     this.document = document;
@@ -14,14 +16,14 @@ export default class View {
 
   getMenuInput() {
     return {
-      name: this.$('#menu-name').value,
-      price: this.$('#menu-price').value,
+      name: $('#menu-name').value,
+      price: $('#menu-price').value,
     };
   }
 
   clearMenuInput() {
-    this.$('#menu-name').value = '';
-    this.$('#menu-price').value = '';
+    $('#menu-name').value = '';
+    $('#menu-price').value = '';
   }
 
   getNewMenuName(e) {
@@ -83,24 +85,20 @@ export default class View {
       result = template.join('');
     }
 
-    this.$('#menu-list').innerHTML = result;
+    $('#menu-list').innerHTML = result;
   }
 
   renderMenuCount(count) {
-    this.$('.menu-count').innerText = `총 ${count}개`;
+    $('.menu-count').innerText = `총 ${count}개`;
   }
 
   renderCategory(name, nameKor, description) {
-    this.$('.category-title').innerText = `${description} 메뉴 관리`;
-    this.$('#menu-name').placeholder = `${nameKor} 메뉴 이름`;
-    this.$('#menu-price').placeholder = `${nameKor} 메뉴 가격`;
+    $('.category-title').innerText = `${description} 메뉴 관리`;
+    $('#menu-name').placeholder = `${nameKor} 메뉴 이름`;
+    $('#menu-price').placeholder = `${nameKor} 메뉴 가격`;
   }
 
   // private method
-
-  $(id) {
-    return this.document.querySelector(id);
-  }
 
   _menuItemTemplate(index, menuName, price, isSoldOut) {
     const soldOutClass = isSoldOut ? ' sold-out' : '';

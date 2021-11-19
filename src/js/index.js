@@ -1,10 +1,9 @@
 import View from './view/View.js';
 import Controller from './controller/Controller.js';
+import { $ } from './util/util.js';
 
-const view = new View(document);
-const controller = new Controller(view);
+// event listner
 
-// 이벤트 리스너 등록
 const _doesContainClass = (e, className) => {
   return e.target.classList.contains(className);
 };
@@ -39,22 +38,26 @@ const handleMenuListClick = (e) => {
   }
 };
 
-document
-  .querySelector('nav')
-  .addEventListener('click', handleNavClick.bind(controller));
+const initEventListner = (document, controller) => {
+  $('nav')
+    .addEventListener('click', handleNavClick.bind(controller));
 
-document.querySelector('#menu-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-});
+  document.querySelector('#menu-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+  });
 
-document
-  .querySelector('#menu-name')
-  .addEventListener('keypress', handleEnterPress.bind(controller));
+  $('#menu-name')
+    .addEventListener('keypress', handleEnterPress.bind(controller));
 
-document
-  .querySelector('#menu-submit-button')
-  .addEventListener('click', handleSubmitButtonClick.bind(controller));
+  $('#menu-submit-button')
+    .addEventListener('click', handleSubmitButtonClick.bind(controller));
 
-document
-  .querySelector('#menu-list')
-  .addEventListener('click', handleMenuListClick.bind(controller));
+  $('#menu-list')
+    .addEventListener('click', handleMenuListClick.bind(controller));
+};
+
+// app
+
+const view = new View(document);
+const controller = new Controller(view);
+initEventListner(document, controller);
