@@ -34,26 +34,31 @@ const handleMenuListClick = (e) => {
   } else if (_doesContainClass(e, 'menu-remove-button')) {
     controller.removeMenuItem(e);
   } else if (_doesContainClass(e, 'menu-sold-out-button')) {
-    controller.setMenuSoldOut(e);
+    controller.toggleSoldOutMenu(e);
   }
 };
 
 const initEventListner = (document, controller) => {
-  $('nav')
-    .addEventListener('click', handleNavClick.bind(controller));
-
-  document.querySelector('#menu-form').addEventListener('submit', (e) => {
+  $('#menu-form').addEventListener('submit', (e) => {
     e.preventDefault();
   });
 
-  $('#menu-name')
-    .addEventListener('keypress', handleEnterPress.bind(controller));
+  $('nav').addEventListener('click', handleNavClick.bind(controller));
 
-  $('#menu-submit-button')
-    .addEventListener('click', handleSubmitButtonClick.bind(controller));
+  $('#menu-name').addEventListener(
+    'keypress',
+    handleEnterPress.bind(controller),
+  );
 
-  $('#menu-list')
-    .addEventListener('click', handleMenuListClick.bind(controller));
+  $('#menu-submit-button').addEventListener(
+    'click',
+    handleSubmitButtonClick.bind(controller),
+  );
+
+  $('#menu-list').addEventListener(
+    'click',
+    handleMenuListClick.bind(controller),
+  );
 };
 
 // app

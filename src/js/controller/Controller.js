@@ -1,25 +1,26 @@
-import MenuList from '../model/MenuList.js';
+import Model from '../model/Model.js';
 import {
-  MENU_NAME_EXISTS,
-  MENU_NAME_NOT_EXISTS,
   EMPTY_VALUE,
-  NOT_CHANGED,
   NOT_NUMBER,
   OUT_OF_PRICE_RANGE,
 } from '../config/config.js';
 
 export default class Controller {
   constructor(view) {
-    this.menuList;
+    this.model = new Model();
     this.view = view;
 
     this.loadMenuList('espresso');
   }
 
-  loadMenuList(category) {
-    this.menuList = new MenuList(category);
-    
-    this.view.render(this.menuList.getMenuItemList());
+  async loadMenuList(category) {
+    try {
+      await this.model.loadMenuListByCategory(category);
+    } catch (e) {
+      console.error(e);
+    }
+
+    this.view.render(this.model.getMenuItemList());
   }
 
   loadCategory(e) {
@@ -27,42 +28,59 @@ export default class Controller {
     this.loadMenuList(category);
   }
 
-  addMenuItem() {
+  async addMenuItem() {
     const { name, price } = this.view.getMenuInput();
     const trimmedName = this._validateMenuName(name);
-    const trimmedPrice = this._validateMenuPrice(price);
+    // const trimmedPrice = this._validateMenuPrice(price);
+    const trimmedPrice = 0;
 
-    this.menuList.addMenuItem(trimmedName, trimmedPrice);
+    try {
+      await this.model.addMenuItem(trimmedName, trimmedPrice);
+    } catch (e) {
+      alert(e);
+    }
 
-    this.view.render(this.menuList.getMenuItemList());
+    this.view.render(this.model.getMenuItemList());
     this.view.clearMenuInput();
   }
 
-  editMenuItem(e) {
+  async editMenuItem(e) {
     const menuId = this.view.getMenuId(e);
     const newName = this._validateMenuName(this.view.getNewMenuName(e));
-    const newPrice = this._validateMenuPrice(this.view.getNewMenuPrice(e));
+    // const newPrice = this._validateMenuPrice(this.view.getNewMenuPrice(e));
 
-    this.menuList.editMenuItem(menuId, newName, newPrice);
+    try {
+      await this.model.editMenuItem(menuId, newName);
+    } catch (e) {
+      alert(e);
+    }
 
-    this.view.render(this.menuList.getMenuItemList())
+    this.view.render(this.model.getMenuItemList());
   }
 
-  removeMenuItem(e) {
+  async toggleSoldOutMenu(e) {
+    const menuId = this.view.getMenuId(e);
+
+    try {
+      await this.model.toggleSoldOutMenu(menuId);
+    } catch(e) {
+      alert(e)
+    }
+
+    this.view.render(this.model.getMenuItemList());
+  }
+
+  async removeMenuItem(e) {
     const menuId = this.view.getMenuId(e);
 
     if (this.view.getWillRemoveMenuItem(e)) {
-      this.menuList.removeMenuItem(menuId);
-      this.view.render(this.menuList.getMenuItemList())
+      try {
+        await this.model.removeMenuItem(menuId);
+      } catch(e) {
+        alert(e)
+      }
+      this.view.render(this.model.getMenuItemList());
     }
-  }
-
-  setMenuSoldOut(e) {
-    const menuId = this.view.getMenuId(e);
-
-    this.menuList.setMenuSoldOut(menuId);
-
-    this.view.render(this.menuList.getMenuItemList());
   }
 
   // private method

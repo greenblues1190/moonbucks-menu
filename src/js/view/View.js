@@ -17,22 +17,21 @@ export default class View {
   getMenuInput() {
     return {
       name: $('#menu-name').value,
-      price: $('#menu-price').value,
+      // price: $('#menu-price').value,
     };
   }
 
   clearMenuInput() {
     $('#menu-name').value = '';
-    $('#menu-price').value = '';
   }
 
   getNewMenuName(e) {
     return prompt('수정할 메뉴 이름', this.getCurrentMenuName(e)) || '';
   }
 
-  getNewMenuPrice(e) {
-    return prompt('수정할 메뉴 가격', this.getCurrentMenuPrice(e)) || '';
-  }
+  // getNewMenuPrice(e) {
+  //   return prompt('수정할 메뉴 가격', this.getCurrentMenuPrice(e)) || '';
+  // }
 
   getCurrentMenuName(e) {
     const $menuItem = e.target.closest('li');
@@ -41,17 +40,16 @@ export default class View {
     return currentMenuName;
   }
 
-  getCurrentMenuPrice(e) {
-    const $menuItem = e.target.closest('li');
-    const $menuPriceSpan = $menuItem.querySelector('.menu-price');
-    const currentMenuPrice = $menuPriceSpan.innerText;
-    return currentMenuPrice;
-  }
+  // getCurrentMenuPrice(e) {
+  //   const $menuItem = e.target.closest('li');
+  //   const $menuPriceSpan = $menuItem.querySelector('.menu-price');
+  //   const currentMenuPrice = $menuPriceSpan.innerText;
+  //   return currentMenuPrice;
+  // }
 
   getMenuId(e) {
     const $menuItem = e.target.closest('li');
-    const menuId = parseInt($menuItem.dataset.menuId);
-    return menuId;
+    return $menuItem.dataset.menuId;
   }
 
   getWillRemoveMenuItem(e) {
@@ -70,15 +68,13 @@ export default class View {
 
   renderMenuItemList(menuList) {
     let result = '';
-    let index = -1;
 
     if (menuList) {
       const template = menuList.map((menuItem) => {
-        index++;
         return this._menuItemTemplate(
-          index,
+          menuItem.id,
           menuItem.name,
-          menuItem.price,
+          // menuItem.price,
           menuItem.isSoldOut,
         );
       });
@@ -95,18 +91,17 @@ export default class View {
   renderCategory(name, nameKor, description) {
     $('.category-title').innerText = `${description} 메뉴 관리`;
     $('#menu-name').placeholder = `${nameKor} 메뉴 이름`;
-    $('#menu-price').placeholder = `${nameKor} 메뉴 가격`;
+    // $('#menu-price').placeholder = `${nameKor} 메뉴 가격`;
   }
 
   // private method
 
-  _menuItemTemplate(index, menuName, price, isSoldOut) {
+  _menuItemTemplate(id, menuName, isSoldOut) {
     const soldOutClass = isSoldOut ? ' sold-out' : '';
 
     return `
-      <li data-menu-id=${index} class="menu-list-item d-flex items-center py-2${soldOutClass}">
+      <li data-menu-id=${id} class="menu-list-item d-flex items-center py-2${soldOutClass}">
         <span class="w-100 pl-2 menu-name">${menuName}</span>
-        <span class="w-100 pl-2 menu-price">${price}</span>
         <div class="w-100 d-flex">
           <button
             type="button"
